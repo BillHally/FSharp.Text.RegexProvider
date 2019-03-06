@@ -27,11 +27,13 @@ let info =
 #I "../../packages/Fake.Core.FakeVar/lib/netstandard2.0"
 #I "../../packages/Fake.Core.Trace/lib/netstandard2.0"
 #I "../../packages/Fake.IO.FileSystem/lib/netstandard2.0"
+
 #load "../../packages/FSharp.Formatting/FSharp.Formatting.fsx"
+
 #r "Fake.Core.Environment.dll"
 #r "Fake.Core.Trace.dll"
 #r "Fake.IO.FileSystem.dll"
-#r "NuGet.Core.dll"
+
 open System.IO
 open Fake
 open Fake.Core

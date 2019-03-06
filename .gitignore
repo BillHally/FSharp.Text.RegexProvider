@@ -177,3 +177,13 @@ nuget/*.nupkg
 .paket/paket.exe
 docs/content/license.md
 docs/content/release-notes.md
+
+# Fake
+.fake
+TestResult.xml
+
+# Paket
+paket-files
+
+# Visual Studio
+.vs
