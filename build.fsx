@@ -123,6 +123,7 @@ Target.create "RunTests" (fun _ ->
                 p with
                     NoBuild   = true
                     NoRestore = true
+                    Configuration = DotNet.BuildConfiguration.Release
             }
         )
         "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
