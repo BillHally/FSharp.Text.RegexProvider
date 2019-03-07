@@ -4,7 +4,7 @@ sudo: false  # use the new container-based Travis infrastructure
 
 dist: xenial
 mono: latest
-dotnet: 2.2
+dotnet: 2.2.100
 
 install:
   # workaround for missing .net 4.6.1 targing pack
