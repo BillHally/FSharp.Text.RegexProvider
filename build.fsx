@@ -115,18 +115,22 @@ Target.create "RunTests" (fun _ ->
     //         ShadowCopy = false
     //         TimeOut = TimeSpan.FromMinutes 20.
     //         OutputDir = "TestResults.xml" })
-    
-    DotNet.test
-        (
-            fun p ->
-            {
-                p with
-                    NoBuild   = true
-                    NoRestore = true
-                    Configuration = DotNet.BuildConfiguration.Release
-            }
-        )
-        "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
+    try
+        DotNet.test
+            (
+                fun p ->
+                {
+                    p with
+                        NoBuild   = true
+                        NoRestore = true
+                        Configuration = DotNet.BuildConfiguration.Release
+                }
+            )
+            "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
+    with
+    | ex ->
+        printfn "EXCEPTION: %A\r\n\r\n%s" ex ex.StackTrace
+        reraise ()        
 )
 
 Target.createFinal "CloseTestRunner" (fun _ ->  
