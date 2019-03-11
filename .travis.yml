@@ -1,7 +1,5 @@
 language: csharp
 
-sudo: false  # use the new container-based Travis infrastructure 
-
 dist: xenial
 mono: latest
 dotnet: 2.2.100

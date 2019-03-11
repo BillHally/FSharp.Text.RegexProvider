@@ -113,30 +113,32 @@ Target.create "Build" ignore
 // Run the unit tests using test runner & kill test runner when complete
 
 Target.create "RunTests" (fun _ ->
-    Target.activateFinal "CloseTestRunner"
+    let framework =
+        if Environment.isLinux then
+            Some "net461"
+        else
+            None // Will test both        
+    //     Target.activateFinal "CloseTestRunner"
 
-    // !! testAssemblies
-    // |> NUnit3.run (fun p ->
-    //     { p with
-    //         ShadowCopy = false
-    //         TimeOut = TimeSpan.FromMinutes 20.
-    //         OutputDir = "TestResults.xml" })
-    try
-        DotNet.test
-            (
-                fun p ->
-                {
-                    p with
-                        NoBuild   = true
-                        NoRestore = true
-                        Configuration = DotNet.BuildConfiguration.Release
-                }
-            )
-            "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
-    with
-    | ex ->
-        printfn "EXCEPTION: %A\r\n\r\n%s" ex ex.StackTrace
-        reraise ()        
+    //     !! testAssemblies
+    //     |> NUnit3.run (fun p ->
+    //         { p with
+    //             ShadowCopy = false
+    //             TimeOut = TimeSpan.FromMinutes 20.
+    //             OutputDir = "TestResults.xml" })
+    // else
+    DotNet.test
+        (
+            fun p ->
+            {
+                p with
+                    NoBuild   = true
+                    NoRestore = true
+                    Configuration = DotNet.BuildConfiguration.Release
+                    Framework = framework
+            }
+        )
+        "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
 )
 
 Target.createFinal "CloseTestRunner" (fun _ ->  
