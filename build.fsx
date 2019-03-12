@@ -54,7 +54,7 @@ let tags = "F# fsharp typeproviders regex"
 
 let solutionFile  = "RegexProvider"
 
-let testAssemblies = "tests/**/bin/Release/net*/*.Tests*.dll"
+let testAssemblies = "tests/**/bin/Release/net4*/*.Tests*.dll"
 let gitHome = "https://github.com/fsprojects"
 let gitName = "FSharp.Text.RegexProvider"
 let cloneUrl = "git@github.com:fsprojects/FSharp.Text.RegexProvider.git"
