@@ -54,7 +54,6 @@ let tags = "F# fsharp typeproviders regex"
 
 let solutionFile  = "RegexProvider"
 
-let testAssemblies = "tests/**/bin/Release/net4*/*.Tests*.dll"
 let gitHome = "https://github.com/fsprojects"
 let gitName = "FSharp.Text.RegexProvider"
 let cloneUrl = "git@github.com:fsprojects/FSharp.Text.RegexProvider.git"
@@ -116,12 +115,31 @@ Target.create "RunTests" (fun _ ->
     if Environment.isLinux then
         Target.activateFinal "CloseTestRunner"
 
-        !! testAssemblies // Only includes net461
+        !! "tests/**/bin/Release/net461/*.Tests*.dll"
         |> NUnit3.run (fun p ->
             { p with
                 ShadowCopy = false
                 TimeOut = TimeSpan.FromMinutes 20.
                 OutputDir = "TestResults.xml" })
+
+        DotNet.test
+            (
+                fun p ->
+                {
+                    p with
+                        NoBuild   = true
+                        NoRestore = true
+                        Configuration = DotNet.BuildConfiguration.Release
+                        MSBuildParams =
+                            {
+                                p.MSBuildParams with
+                                    Properties =
+                                        ("TargetFramework", "netcoreapp2.1")
+                                        ::p.MSBuildParams.Properties
+                            }
+                }
+            )
+            "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
     else
         DotNet.test
             (
