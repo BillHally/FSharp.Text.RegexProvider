@@ -139,6 +139,7 @@ Target.create "RunTests" (fun _ ->
                                     Properties =
                                         ("TargetFramework", "netcoreapp2.0")
                                         ::p.MSBuildParams.Properties
+                                    Verbosity = Some Diagnostic                                    
                             }
                 }
             )
