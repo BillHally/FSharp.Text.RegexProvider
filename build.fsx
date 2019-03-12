@@ -113,6 +113,9 @@ Target.create "Build" ignore
 
 Target.create "RunTests" (fun _ ->
     if Environment.isLinux then
+        // Just using "dotnet test" doesn't seem to work on Travis/Linux,
+        // so run net461 tests using NUnit3, then use "dotnet test" to run
+        // the .Net Core ones.
         Target.activateFinal "CloseTestRunner"
 
         !! "tests/**/bin/Release/net461/*.Tests*.dll"
@@ -134,7 +137,7 @@ Target.create "RunTests" (fun _ ->
                             {
                                 p.MSBuildParams with
                                     Properties =
-                                        ("TargetFramework", "netcoreapp2.1")
+                                        ("TargetFramework", "netcoreapp2.0")
                                         ::p.MSBuildParams.Properties
                             }
                 }
