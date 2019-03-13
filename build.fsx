@@ -125,25 +125,39 @@ Target.create "RunTests" (fun _ ->
                 TimeOut = TimeSpan.FromMinutes 20.
                 OutputDir = "TestResults.xml" })
 
-        DotNet.test
-            (
-                fun p ->
-                {
-                    p with
-                        NoBuild   = true
-                        NoRestore = true
-                        Configuration = DotNet.BuildConfiguration.Release
-                        MSBuildParams =
-                            {
-                                p.MSBuildParams with
-                                    Properties =
-                                        ("TargetFramework", "netcoreapp2.0")
-                                        ::p.MSBuildParams.Properties
-                                    Verbosity = Some Diagnostic                                    
-                            }
-                }
-            )
+        // DotNet.test
+        //     (
+        //         fun p ->
+        //         {
+        //             p with
+        //                 NoBuild   = true
+        //                 NoRestore = true
+        //                 Configuration = DotNet.BuildConfiguration.Release
+        //                 MSBuildParams =
+        //                     {
+        //                         p.MSBuildParams with
+        //                             Properties =
+        //                                 ("TargetFramework", "netcoreapp2.0")
+        //                                 ::p.MSBuildParams.Properties
+        //                             Verbosity = Some Diagnostic                                    
+        //                     }
+        //         }
+        //     )
+        //     "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
+        [
+            "test"
             "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
+            "--configuration Release"
+            "--no-build"
+            "--no-restore"
+            "/v:diag"
+            "/clp:ForceConsoleColor"
+            "/p:TargetFramework=netcoreapp2.0"
+            "/bl:tests.binlog"
+        ]
+        |> CreateProcess.fromRawCommand "dotnet"
+        |> Proc.run
+        |> ignore
     else
         DotNet.test
             (
