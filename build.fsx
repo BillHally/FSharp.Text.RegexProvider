@@ -146,7 +146,7 @@ Target.create "RunTests" (fun _ ->
         //     "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
         [
             "test"
-            "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
+            (sprintf "%s/tests/RegexProvider.tests/RegexProvider.tests.fsproj" Environment.CurrentDirectory)
             "--configuration"
             "Release"
             "--no-build"
