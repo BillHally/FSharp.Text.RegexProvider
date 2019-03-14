@@ -147,7 +147,8 @@ Target.create "RunTests" (fun _ ->
         [
             "test"
             "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
-            "--configuration Release"
+            "--configuration"
+            "Release"
             "--no-build"
             "--no-restore"
             "/v:diag"
