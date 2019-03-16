@@ -112,71 +112,17 @@ Target.create "Build" ignore
 // Run the unit tests using test runner & kill test runner when complete
 
 Target.create "RunTests" (fun _ ->
-    if Environment.isLinux || Environment.environVarAsBoolOrDefault "PretendLinux" false then
-        // Just using "dotnet test" doesn't seem to work on Travis/Linux,
-        // so run net461 tests using NUnit3, then use "dotnet test" to run
-        // the .Net Core ones.
-        Target.activateFinal "CloseTestRunner"
-
-        !! "tests/**/bin/Release/net461/*.Tests*.dll"
-        |> NUnit3.run (fun p ->
-            { p with
-                ShadowCopy = false
-                TimeOut = TimeSpan.FromMinutes 20.
-                OutputDir = "TestResults.xml" })
-
-        // DotNet.test
-        //     (
-        //         fun p ->
-        //         {
-        //             p with
-        //                 NoBuild   = true
-        //                 NoRestore = true
-        //                 Configuration = DotNet.BuildConfiguration.Release
-        //                 MSBuildParams =
-        //                     {
-        //                         p.MSBuildParams with
-        //                             Properties =
-        //                                 ("TargetFramework", "netcoreapp2.0")
-        //                                 ::p.MSBuildParams.Properties
-        //                             Verbosity = Some Diagnostic                                    
-        //                     }
-        //         }
-        //     )
-        //     "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
-        // let testProjectFile =
-        //     !! "tests/RegexProvider.Tests/RegexProvider.Tests.fsproj"
-        //     |> Seq.head
-
-        // printfn "testProjectFile: '%s'" testProjectFile
-
-        [
-            "test"
-            "tests/RegexProvider.Tests/RegexProvider.Tests.fsproj"
-            "--configuration"
-            "Release"
-            "--no-build"
-            "--no-restore"
-            "/v:diag"
-            "/clp:ForceConsoleColor"
-            "/p:TargetFramework=netcoreapp2.0"
-            "/bl:tests.binlog"
-        ]
-        |> CreateProcess.fromRawCommand "dotnet"
-        |> Proc.run
-        |> ignore
-    else
-        DotNet.test
-            (
-                fun p ->
-                {
-                    p with
-                        NoBuild   = true
-                        NoRestore = true
-                        Configuration = DotNet.BuildConfiguration.Release
-                }
-            )
-            "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
+    DotNet.test
+        (
+            fun p ->
+            {
+                p with
+                    NoBuild   = true
+                    NoRestore = true
+                    Configuration = DotNet.BuildConfiguration.Release
+            }
+        )
+        "tests/RegexProvider.Tests/RegexProvider.tests.fsproj"
 )
 
 Target.createFinal "CloseTestRunner" (fun _ ->  
