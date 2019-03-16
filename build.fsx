@@ -112,7 +112,7 @@ Target.create "Build" ignore
 // Run the unit tests using test runner & kill test runner when complete
 
 Target.create "RunTests" (fun _ ->
-    if Environment.isLinux then
+    if Environment.isLinux || Environment.environVarAsBoolOrDefault "PretendLinux" false then
         // Just using "dotnet test" doesn't seem to work on Travis/Linux,
         // so run net461 tests using NUnit3, then use "dotnet test" to run
         // the .Net Core ones.
@@ -144,9 +144,15 @@ Target.create "RunTests" (fun _ ->
         //         }
         //     )
         //     "tests/RegexProvider.tests/RegexProvider.tests.fsproj"
+        // let testProjectFile =
+        //     !! "tests/RegexProvider.Tests/RegexProvider.Tests.fsproj"
+        //     |> Seq.head
+
+        // printfn "testProjectFile: '%s'" testProjectFile
+
         [
             "test"
-            (sprintf "%s/tests/RegexProvider.tests/RegexProvider.tests.fsproj" Environment.CurrentDirectory)
+            "tests/RegexProvider.Tests/RegexProvider.Tests.fsproj"
             "--configuration"
             "Release"
             "--no-build"
